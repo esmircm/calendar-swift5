@@ -1,11 +1,15 @@
 import UIKit
 import JTAppleCalendar
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, SBCardPopupContent {
     
     @IBOutlet var calendarView: JTAppleCalendarView!
     let testCalendar = Calendar(identifier: .gregorian)
     @IBOutlet weak var monthTitlee: UILabel!
+    
+    weak var popupViewController: SBCardPopupViewController?
+    let allowsTapToDismissPopupCard = true
+    let allowsSwipeToDismissPopupCard = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,10 +112,11 @@ class ViewController: UIViewController {
 
     }
     
-    @IBAction func test(_ sender: UIButton) {
-        let popupContent = PopupContentWithDismissViewController.create()
-        let cardPopup = SBCardPopupViewController(contentViewController: popupContent)
-        cardPopup.show(onViewController: self)
+    static func create() -> UIViewController {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewController(withIdentifier: "ViewController") as! ViewController
+        return viewController
     }
 
     @IBAction func goBack(_ sender: UIButton) {
@@ -121,6 +126,7 @@ class ViewController: UIViewController {
     @IBAction func goNext(_ sender: UIButton) {
         calendarView.scrollToSegment(.next)
     }
+    
 }
 
 extension ViewController: JTAppleCalendarViewDataSource {
